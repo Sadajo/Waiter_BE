@@ -9,6 +9,12 @@ const http = require('http');
 require('dotenv').config();
 const { connectDb } = require('./db');
 
+const cors = require('cors');
+
+app.use(cors({
+  origin: 'http://localhost:3000',  // 프론트엔드 주소
+  credentials: true,                // 쿠키, 인증 정보 전송 허용
+}));
 const app = express()
 
 // 세션 설정
