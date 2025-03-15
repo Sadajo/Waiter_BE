@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # 2. Node.js 환경 설정 (버전 23)
+      # 2. Node.js 환경 설정 (버전 20)
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -49,4 +49,4 @@ jobs:
           application_name: ${{ secrets.ELASTIC_BEANSTALK_APPLICATION_NAME }}
           environment_name: ${{ secrets.ELASTIC_BEANSTALK_ENVIRONMENT_NAME }}
           version_label: ${{ github.sha }}
-          zip_file: deploy.zip
+          deployment_package: deploy.zip
