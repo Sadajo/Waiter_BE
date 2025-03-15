@@ -23,9 +23,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # # 4. 빌드 (필요 시) - 필요 없을 듯?
-      # - name: Build project
-      #   run: npm run build
+      # 4. .env 파일 생성
+      - name: Create .env file
+        run: |
+          echo "SESSION_SECRET=${{ secrets.SESSION_SECRET }}" >> .env
+          echo "MONGODB_URL=${{ secrets.MONGODB_URL }}" >> .env
 
       # 5. 배포 패키지 생성 (zip 파일) - softprops 라이브러리 대신 공식 명령어로 교체
       - name: Create deployment package
