@@ -27,11 +27,9 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # 5. 배포 패키지 생성 (zip 파일)
+      # 5. 배포 패키지 생성 (zip 파일) - softprops 라이브러리 대신 공식 명령어로 교체
       - name: Create deployment package
-        uses: softprops/zip-action@v1
-        with:
-          args: ./deploy.zip .
+        run: zip -r deploy.zip .
 
       # 6. AWS Credentials 구성 (GitHub Secrets 사용)
       - name: Configure AWS Credentials
