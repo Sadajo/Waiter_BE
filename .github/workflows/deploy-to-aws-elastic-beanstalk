@@ -1,0 +1,54 @@
+name: Deploy to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 소스 코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # 2. Node.js 환경 설정 (버전 23)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # 3. 의존성 설치
+      - name: Install dependencies
+        run: npm install
+
+      # 4. 빌드 (필요 시)
+      - name: Build project
+        run: npm run build
+
+      # 5. 배포 패키지 생성 (zip 파일)
+      - name: Create deployment package
+        uses: softprops/zip-action@v1
+        with:
+          args: ./deploy.zip .
+
+      # 6. AWS Credentials 구성 (GitHub Secrets 사용)
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 7. Elastic Beanstalk 배포 (GitHub Actions 액션 사용)
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ secrets.AWS_REGION }}
+          application_name: ${{ secrets.ELASTIC_BEANSTALK_APPLICATION_NAME }}
+          environment_name: ${{ secrets.ELASTIC_BEANSTALK_ENVIRONMENT_NAME }}
+          version_label: ${{ github.sha }}
+          zip_file: deploy.zip
