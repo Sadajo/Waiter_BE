@@ -1,6 +1,6 @@
 const mainController = {
     home: (req, res) => {
-        res.send('홈페이지입니다!')
+        res.send('이 글을 보고 있단 것은 Continuous Deployment를 성공했다는 것이다.')
     }
 }
 
